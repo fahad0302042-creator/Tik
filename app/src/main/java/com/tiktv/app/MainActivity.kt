@@ -136,6 +136,13 @@ class MainActivity : Activity() {
         hideSystemUi()
     }
 
+    override fun onPause() {
+        // Stop the audio when the user leaves the app, otherwise the feed keeps playing
+        // while they are in Settings or on the home screen.
+        if (::web.isInitialized && pageLoaded) js("Tv.pause()")
+        super.onPause()
+    }
+
     override fun onDestroy() {
         handler.removeCallbacksAndMessages(null)
         if (::web.isInitialized) {
@@ -536,8 +543,10 @@ class MainActivity : Activity() {
 
     private fun handleCenter(event: KeyEvent): Boolean {
         if (event.action == KeyEvent.ACTION_DOWN) {
-            centerLongPressFired = false
-            handler.postDelayed(centerLongPress, LONG_PRESS_MS)
+            if (event.repeatCount == 0) {
+                centerLongPressFired = false
+                handler.postDelayed(centerLongPress, LONG_PRESS_MS)
+            }
         } else {
             handler.removeCallbacks(centerLongPress)
             if (!centerLongPressFired) {
