@@ -1,6 +1,5 @@
 package io.tiktv.ui.player
 
-import android.widget.AspectRatioFrameLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -26,8 +25,10 @@ import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import androidx.media3.common.AudioAttributes
+import androidx.media3.common.C
 import androidx.media3.common.MediaItem
 import androidx.media3.exoplayer.ExoPlayer
+import androidx.media3.ui.AspectRatioFrameLayout
 import androidx.media3.ui.PlayerView
 import io.tiktv.data.VideoItem
 
@@ -39,10 +40,10 @@ fun PlayerScreen(video: VideoItem, onBack: () -> Unit) {
         ExoPlayer.Builder(context)
             .setAudioAttributes(
                 AudioAttributes.Builder()
-                    .setUsage(AudioAttributes.USAGE_MEDIA)
-                    .setContentType(AudioAttributes.CONTENT_TYPE_MOVIE)
+                    .setUsage(C.USAGE_MEDIA)
+                    .setContentType(C.AUDIO_CONTENT_TYPE_MOVIE)
                     .build(),
-                useDefaultLayout = true,
+                true,
             )
             .build()
     }
@@ -62,7 +63,7 @@ fun PlayerScreen(video: VideoItem, onBack: () -> Unit) {
             factory = { ctx ->
                 PlayerView(ctx).also { view ->
                     view.player = player
-                    view.resizeMode = AspectRatioFrameLayout.ResizeMode.ZOOM
+                    view.resizeMode = AspectRatioFrameLayout.RESIZE_MODE_ZOOM
                     view.useController = true
                 }
             },

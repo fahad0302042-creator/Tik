@@ -46,7 +46,7 @@ jobs:
                          if l.startswith('e: ') or 'error:' in l.lower()
                          or 'FAILURE' in l or 'What went wrong' in l or 'Caused by' in l]
           if status != '0':
-              head = '\n'.join(interesting[:25]) or '\n'.join(text.splitlines()[-40:])
+              head = '\n'.join(interesting[:60]) or '\n'.join(text.splitlines()[-40:])
               msg = f'gradle exit {status}%0A' + head.replace('%', '%25').replace('\n', '%0A')
               print('::error title=Gradle failure::' + msg[:6000])
           PY
