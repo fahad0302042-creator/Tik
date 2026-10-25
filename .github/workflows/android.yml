@@ -61,6 +61,20 @@ jobs:
           cp app/build/outputs/apk/release/*.apk out/TikTV.apk
           ls -la out
 
+      - name: Verify APK
+        run: |
+          APK=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          : > /tmp/verify.txt
+          "$BT/aapt2" dump badging "$APK" | head -3 >> /tmp/verify.txt 2>&1 || true
+          "$BT/apksigner" verify --print-certs "$APK" >> /tmp/verify.txt 2>&1 || true
+          echo "APK: $APK ($(du -h "$APK" | cut -f1))" >> /tmp/verify.txt
+          cat /tmp/verify.txt
+          python3 - <<'PY'
+          text = open('/tmp/verify.txt', errors='replace').read()
+          print('::notice title=APK verified::' + text.replace('%', '%25').replace('\n', '%0A')[:4000])
+          PY
+
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:

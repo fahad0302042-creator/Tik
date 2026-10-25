@@ -22,7 +22,7 @@ the same pages your TV's browser would.
 
 1. Install **Downloader** (by AFTVnews) from the Play Store on your TV.
 2. Open it and enter the release URL for this repo:
-   `https://github.com/<owner>/<repo>/releases/latest/download/TikTV.apk`
+   `https://github.com/fahad0302042-creator/Tik/releases/latest/download/TikTV.apk`
 3. Install, then launch **TikTV** from your apps row.
 
 **Option B — ADB**
@@ -34,7 +34,8 @@ adb install -r TikTV.apk
 
 **Option C — build artifact**
 
-Every push builds the APK automatically (GitHub → Actions → *Build APK* → Artifacts).
+Every push builds the APK automatically (GitHub → Actions → *Build APK* → Artifacts), and a
+published release always carries the newest one.
 
 Updates install over the old version because every build is signed with the same
 throwaway keystore committed in `keystore/` (see [Security notes](#security-notes)).
