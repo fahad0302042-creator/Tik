@@ -29,10 +29,28 @@ jobs:
       - name: Build release APK
         run: |
           chmod +x gradlew
+          set +e
           ./gradlew --no-daemon --stacktrace \
             -PversionCode=${{ github.run_number }} \
             -PversionName=1.0.${{ github.run_number }} \
-            assembleRelease
+            assembleRelease > /tmp/build.log 2>&1
+          status=$?
+          cat /tmp/build.log
+          # Surface the failure as a check annotation, which is readable without
+          # downloading the (sometimes unavailable) job log archive.
+          python3 - "$status" <<'PY'
+          import sys
+          status = sys.argv[1]
+          text = open('/tmp/build.log', errors='replace').read()
+          interesting = [l for l in text.splitlines()
+                         if l.startswith('e: ') or 'error:' in l.lower()
+                         or 'FAILURE' in l or 'What went wrong' in l or 'Caused by' in l]
+          if status != '0':
+              head = '\n'.join(interesting[:25]) or '\n'.join(text.splitlines()[-40:])
+              msg = f'gradle exit {status}%0A' + head.replace('%', '%25').replace('\n', '%0A')
+              print('::error title=Gradle failure::' + msg[:6000])
+          PY
+          exit $status
 
       - name: Collect APK
         run: |
