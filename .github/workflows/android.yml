@@ -1,0 +1,97 @@
+name: Build APK
+
+on:
+  push:
+    branches: ["**"]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      - name: Set up Gradle
+        uses: gradle/actions/setup-gradle@v4
+
+      - name: Build release APK
+        run: |
+          chmod +x gradlew
+          set +e
+          ./gradlew --no-daemon --stacktrace \
+            -PversionCode=${{ github.run_number }} \
+            -PversionName=1.0.${{ github.run_number }} \
+            assembleRelease > /tmp/build.log 2>&1
+          status=$?
+          cat /tmp/build.log
+          # Surface the failure as a check annotation, which is readable without
+          # downloading the (sometimes unavailable) job log archive.
+          python3 - "$status" <<'PY'
+          import sys
+          status = sys.argv[1]
+          text = open('/tmp/build.log', errors='replace').read()
+          interesting = [l for l in text.splitlines()
+                         if l.startswith('e: ') or 'error:' in l.lower()
+                         or 'FAILURE' in l or 'What went wrong' in l or 'Caused by' in l]
+          if status != '0':
+              head = '\n'.join(interesting[:25]) or '\n'.join(text.splitlines()[-40:])
+              msg = f'gradle exit {status}%0A' + head.replace('%', '%25').replace('\n', '%0A')
+              print('::error title=Gradle failure::' + msg[:6000])
+          PY
+          exit $status
+
+      - name: Collect APK
+        run: |
+          mkdir -p out
+          cp app/build/outputs/apk/release/*.apk "out/TikTV-${{ github.run_number }}.apk"
+          # Stable filename so a TV can always fetch the newest build from
+          # https://github.com/<owner>/<repo>/releases/latest/download/TikTV.apk
+          cp app/build/outputs/apk/release/*.apk out/TikTV.apk
+          ls -la out
+
+      - name: Verify APK
+        run: |
+          APK=$(ls app/build/outputs/apk/release/*.apk | head -1)
+          BT=$(ls -d "$ANDROID_HOME"/build-tools/* | sort -V | tail -1)
+          : > /tmp/verify.txt
+          "$BT/aapt2" dump badging "$APK" | head -3 >> /tmp/verify.txt 2>&1 || true
+          "$BT/apksigner" verify --print-certs "$APK" >> /tmp/verify.txt 2>&1 || true
+          echo "APK: $APK ($(du -h "$APK" | cut -f1))" >> /tmp/verify.txt
+          cat /tmp/verify.txt
+          python3 - <<'PY'
+          text = open('/tmp/verify.txt', errors='replace').read()
+          print('::notice title=APK verified::' + text.replace('%', '%25').replace('\n', '%0A')[:4000])
+          PY
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: TikTV-apk
+          path: out/*.apk
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ startsWith(github.ref, 'refs/tags/v') && github.ref_name || format('build-{0}', github.run_number) }}
+          name: TikTV build ${{ github.run_number }}
+          body: |
+            Sideload this APK on Android TV / Google TV (Downloader app or `adb install`).
+            Stable link: `https://github.com/${{ github.repository }}/releases/latest/download/TikTV.apk`
+          files: out/*.apk
+          generate_release_notes: true
+          make_latest: true
