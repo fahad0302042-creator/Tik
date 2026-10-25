@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">TikTV</string>
+    <string name="settings_title">Settings</string>
+    <string name="menu_title">TikTV menu</string>
+    <string name="search_hint">Search TikTok</string>
+    <string name="open_url_hint">Paste a TikTok link</string>
+    <string name="loading">Loading TikTok…</string>
+    <string name="blocked_link">That link tried to open another app, so it was blocked.</string>
+    <string name="exit_hint">Press Back again to exit</string>
+    <string name="no_video">No video on the page yet — give it a second</string>
+    <string name="cursor_on">Mouse cursor: on</string>
+    <string name="cursor_off">Mouse cursor: off</string>
+    <string name="cinema_on">Cinema mode: on</string>
+    <string name="cinema_off">Cinema mode: off</string>
+    <string name="error_title">Could not load TikTok</string>
+    <string name="retry">Retry</string>
+    <string name="help_title">Remote guide</string>
+    <string name="help_body">D-pad Up / Down — previous / next video\nD-pad Left / Right — rewind / forward 10 seconds\nOK — play / pause\nHold OK — turn the mouse cursor on / off\nMenu or Info — app menu (search, settings)\nRed — cursor · Green — cinema mode\nYellow — mute · Blue — search\nBack — go back; press twice to exit</string>
+
+    <!-- App menu -->
+    <string name="menu_play_pause">Play / pause</string>
+    <string name="menu_next">Next video</string>
+    <string name="menu_previous">Previous video</string>
+    <string name="menu_rewind">Rewind 10 seconds</string>
+    <string name="menu_forward">Forward 10 seconds</string>
+    <string name="menu_mute">Mute / unmute</string>
+    <string name="menu_search">Search…</string>
+    <string name="menu_open_link">Open a link…</string>
+    <string name="menu_home">Home feed</string>
+    <string name="menu_sign_in">Sign in</string>
+    <string name="menu_reload">Reload</string>
+    <string name="menu_settings">Settings</string>
+    <string name="menu_help">Remote guide</string>
+    <string name="menu_diagnostics">Diagnostics</string>
+    <string name="menu_exit">Exit</string>
+    <string name="menu_cursor_on">Mouse cursor: ON</string>
+    <string name="menu_cursor_off">Mouse cursor: OFF</string>
+    <string name="menu_cinema_on">Cinema mode: ON</string>
+    <string name="menu_cinema_off">Cinema mode: OFF</string>
+    <string name="diagnostics_title">Diagnostics</string>
+    <string name="diagnostics_busy">The page is still loading.</string>
+
+    <!-- Settings -->
+    <string name="set_home_title">Home page</string>
+    <string name="set_home_sub_default">TikTok For You feed</string>
+    <string name="set_layout_title">Site layout</string>
+    <string name="set_layout_desktop">Desktop (recommended for TV)</string>
+    <string name="set_layout_mobile">Mobile</string>
+    <string name="set_cinema_title">Cinema mode</string>
+    <string name="set_cinema_sub">Experimental: stretch the video over the whole screen and hide TikTok\'s menus.</string>
+    <string name="set_autoplay_title">Auto-advance</string>
+    <string name="set_autoplay_sub">Play the next video automatically when one finishes.</string>
+    <string name="set_start_cursor_title">Start with mouse cursor</string>
+    <string name="set_start_cursor_sub">Show the virtual pointer as soon as the app opens.</string>
+    <string name="set_cursor_speed_title">Cursor speed</string>
+    <string name="set_speed_slow">Slow</string>
+    <string name="set_speed_normal">Normal</string>
+    <string name="set_speed_fast">Fast</string>
+    <string name="set_signout_title">Sign out</string>
+    <string name="set_signout_sub">Clear cookies, cache and the TikTok session on this device.</string>
+    <string name="set_signout_confirm">Sign out of TikTok and clear all site data?</string>
+    <string name="set_signout_done">Signed out</string>
+    <string name="set_reset_title">Reset all settings</string>
+    <string name="set_reset_sub">Restore every option on this screen to its default.</string>
+    <string name="set_reset_confirm">Reset all settings?</string>
+    <string name="set_reset_done">Settings reset</string>
+    <string name="set_about_title">About TikTV</string>
+    <string name="set_about_sub">Unofficial TV wrapper — version %1$s</string>
+    <string name="set_about_body">TikTV is an unofficial client that shows TikTok\'s public website full screen and adds remote-control navigation. It is not affiliated with TikTok and uses no private API.\n\nSigning in with Google is blocked by Google inside embedded browsers, so use phone number, email or username sign-in instead.\n\nTikTok changes its website regularly. If feed navigation stops working, open the app menu → Diagnostics.</string>
+    <string name="set_back_hint">Press Back to return to TikTok</string>
+    <string name="custom_url_title">Custom home page</string>
+</resources>

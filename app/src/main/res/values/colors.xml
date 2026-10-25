@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="tik_black">#FF000000</color>
+    <color name="tik_dark">#FF101014</color>
+    <color name="tik_card">#FF1B1B22</color>
+    <color name="tik_card_focus">#FF2E2E3A</color>
+    <color name="tik_text">#FFF2F2F5</color>
+    <color name="tik_text_dim">#FF9A9AA8</color>
+    <color name="tik_accent">#FF25F4EE</color>
+    <color name="tik_accent_alt">#FFFE2C55</color>
+</resources>

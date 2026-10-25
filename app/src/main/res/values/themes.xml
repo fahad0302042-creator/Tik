@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="Theme.TikTV" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/tik_black</item>
+        <item name="android:colorBackground">@color/tik_black</item>
+        <item name="colorPrimary">@color/tik_accent</item>
+        <item name="colorAccent">@color/tik_accent</item>
+        <item name="android:textColorPrimary">@color/tik_text</item>
+        <item name="android:windowFullscreen">true</item>
+        <item name="android:windowContentOverlay">@null</item>
+        <item name="android:windowActionBar">false</item>
+        <item name="android:windowNoTitle">true</item>
+    </style>
+
+    <style name="Theme.TikTV.Dialog" parent="android:Theme.Material.Dialog.Alert">
+        <item name="android:windowBackground">@color/tik_card</item>
+        <item name="colorAccent">@color/tik_accent</item>
+        <item name="android:textColorPrimary">@color/tik_text</item>
+    </style>
+
+    <style name="SettingsTitle">
+        <item name="android:textSize">26sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textColor">@color/tik_text</item>
+        <item name="android:paddingBottom">8dp</item>
+    </style>
+
+    <style name="SettingsRowTitle">
+        <item name="android:textSize">18sp</item>
+        <item name="android:textColor">@color/tik_text</item>
+    </style>
+
+    <style name="SettingsRowSubtitle">
+        <item name="android:textSize">14sp</item>
+        <item name="android:textColor">@color/tik_text_dim</item>
+        <item name="android:paddingTop">4dp</item>
+    </style>
+
+</resources>
