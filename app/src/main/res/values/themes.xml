@@ -4,8 +4,8 @@
     <style name="Theme.TikTV" parent="android:Theme.Material.NoActionBar">
         <item name="android:windowBackground">@color/tik_black</item>
         <item name="android:colorBackground">@color/tik_black</item>
-        <item name="colorPrimary">@color/tik_accent</item>
-        <item name="colorAccent">@color/tik_accent</item>
+        <item name="android:colorPrimary">@color/tik_accent</item>
+        <item name="android:colorAccent">@color/tik_accent</item>
         <item name="android:textColorPrimary">@color/tik_text</item>
         <item name="android:windowFullscreen">true</item>
         <item name="android:windowContentOverlay">@null</item>
@@ -15,7 +15,7 @@
 
     <style name="Theme.TikTV.Dialog" parent="android:Theme.Material.Dialog.Alert">
         <item name="android:windowBackground">@color/tik_card</item>
-        <item name="colorAccent">@color/tik_accent</item>
+        <item name="android:colorAccent">@color/tik_accent</item>
         <item name="android:textColorPrimary">@color/tik_text</item>
     </style>
 
