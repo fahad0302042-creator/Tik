@@ -18,27 +18,44 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
       - name: Set up JDK 17
-        uses: actions/setup-java@v4
+        uses: actions/setup-java@v6
         with:
           distribution: temurin
           java-version: '17'
 
-      - name: Setup Android SDK
-        uses: android-actions/setup-android@v4
-        with:
-          packages: 'platforms;android-37 build-tools;36.0.0'
-
       - name: Set up Gradle
-        uses: gradle/actions/setup-gradle@v4
+        uses: gradle/actions/setup-gradle@v6
 
       - name: Assemble debug APK
-        run: ./gradlew :app:assembleDebug --no-daemon --stacktrace
+        run: |
+          chmod +x gradlew
+          set +e
+          ./gradlew :app:assembleDebug --no-daemon --stacktrace > /tmp/build.log 2>&1
+          status=$?
+          cat /tmp/build.log
+          # Surface the failure as a check annotation, which is readable without
+          # downloading the (sometimes unavailable) job log archive.
+          python3 - "$status" <<'PY'
+          import sys
+          status = sys.argv[1]
+          text = open('/tmp/build.log', errors='replace').read()
+          interesting = [l for l in text.splitlines()
+                         if l.startswith('e: ') or 'error:' in l.lower()
+                         or 'FAILURE' in l or 'What went wrong' in l or 'Caused by' in l]
+          if status != '0':
+              head = '\n'.join(interesting[:25]) or '\n'.join(text.splitlines()[-40:])
+              msg = f'gradle exit {status}%0A' + head.replace('%', '%25').replace('\n', '%0A')
+              print('::error title=Gradle failure::' + msg[:6000])
+          PY
+          exit $status
 
       - name: Upload APK artifact
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v7
         with:
           name: TikTV-debug.apk
           path: app/build/outputs/apk/debug/*.apk
+          if-no-files-found: error
+          retention-days: 90
