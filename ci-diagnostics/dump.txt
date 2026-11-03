@@ -1,17 +1,64 @@
 pwd=/home/runner/work/Tik/Tik
---- app ---
-total 40
-drwxr-xr-x  3 runner runner  4096 Nov  3 11:03 .
-drwxr-xr-x 15 runner runner  4096 Nov  3 11:04 ..
--rw-r--r--  1 runner runner     6 Nov  3 11:03 .gitignore
--rw-r--r--  1 runner runner 14913 Nov  3 11:03 build.gradle.kts
--rw-r--r--  1 runner runner   518 Nov  3 11:03 lint.xml
--rw-r--r--  1 runner runner   754 Nov  3 11:03 proguard-rules.pro
-drwxr-xr-x  7 runner runner  4096 Nov  3 11:03 src
+--- gradle version ---
+
+------------------------------------------------------------
+Gradle 9.4.1
+------------------------------------------------------------
+
+Build time:    2026-03-19 08:46:28 UTC
+Revision:      2d6327017519d23b96af35865dc997fcb544fb40
+
+Kotlin:        2.3.0
+Groovy:        4.0.29
+Ant:           Apache Ant(TM) version 1.10.15 compiled on August 25 2024
+Launcher JVM:  17.0.21 (Eclipse Adoptium 17.0.21+9)
+Daemon JVM:    /usr/lib/jvm/temurin-17-jdk-amd64 (no Daemon JVM specified, using current Java home)
+OS:            Linux 7.0.0-1017-azure amd64
+
+--- projects ---
+Calculating task graph as no cached configuration is available for tasks: projects
+
+> Configure project :app
+No prerelease signing config!
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_7-1793704058206.json
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+A problem occurred configuring project ':app'.
+> defaultConfig contains custom resource values, but the feature is disabled.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 1s
+Configuration cache entry stored.
+--- assemble ---
+Calculating task graph as no cached configuration is available for tasks: :app:assembleStableDebug
+
+> Configure project :app
+No prerelease signing config!
+gradle/actions: Writing build results to /home/runner/work/_temp/.gradle-actions/build-results/__run_7-1793704059360.json
+
+FAILURE: Build failed with an exception.
+
+* What went wrong:
+A problem occurred configuring project ':app'.
+> defaultConfig contains custom resource values, but the feature is disabled.
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 926ms
+Configuration cache entry stored.
+--- apk files ---
+--- outputs dirs ---
 --- app/build ---
 ls: cannot access 'app/build': No such file or directory
---- app/build/outputs ---
-find: ‘app/build/outputs’: No such file or directory
---- outputs dirs ---
---- apk files ---
---- assemble tasks ---
+--- build dir property ---
