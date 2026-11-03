@@ -61,12 +61,15 @@ jobs:
         if: failure() && steps.unit-tests.conclusion == 'failure'
         run: python3 .github/annotate_log.py "$RUNNER_TEMP/unit-test.log"
 
+      - name: Locate APK
+        run: find app/build/outputs -name '*.apk' -print
+
       - name: Upload APK
         if: always()
         uses: actions/upload-artifact@v7
         with:
           name: tiktv-stable-debug
-          path: app/build/outputs/apk/stable/debug/*.apk
+          path: app/build/outputs/apk/**/*.apk
           if-no-files-found: error
 
       - name: Upload test reports
