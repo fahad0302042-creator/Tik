@@ -66,12 +66,13 @@ jobs:
         run: |
           {
             echo "pwd=$(pwd)"
-            echo "--- app ---"; ls -la app 2>&1
-            echo "--- app/build ---"; ls -la app/build 2>&1
-            echo "--- app/build/outputs ---"; find app/build/outputs -maxdepth 4 -print 2>&1 | head -80
-            echo "--- outputs dirs ---"; find . -maxdepth 6 -type d -name outputs -print 2>&1
-            echo "--- apk files ---"; find . -name '*.apk' -print 2>&1
-            echo "--- assemble tasks ---"; ./gradlew :app:tasks --all --console=plain 2>&1 | grep -i -E '^assemble|package.*Debug' | head -20
+            echo "--- gradle version ---"; ./gradlew --version --console=plain 2>&1 | head -15
+            echo "--- projects ---"; ./gradlew projects --console=plain 2>&1 | head -25
+            echo "--- assemble ---"; ./gradlew :app:assembleStableDebug --console=plain 2>&1 | tail -40
+            echo "--- apk files ---"; find . -name '*.apk' -print 2>&1 | head -20
+            echo "--- outputs dirs ---"; find . -maxdepth 6 -type d -name outputs -print 2>&1 | head -20
+            echo "--- app/build ---"; ls -la app/build 2>&1 | head -30
+            echo "--- build dir property ---"; ./gradlew :app:properties --console=plain 2>&1 | grep -i -E 'buildDir|buildDirectory' | head -10
           } > ci-diagnostics/dump.txt 2>&1 || true
           git config user.email "actions@github.com"
           git config user.name "GitHub Actions"
