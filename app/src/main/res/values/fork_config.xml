@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default TV overscan inset. Users can override this in Settings > UI. -->
+    <integer name="fork_default_tv_overscan_dp">24</integer>
+</resources>
