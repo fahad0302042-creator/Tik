@@ -18,6 +18,9 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    env:
+      # Optional: a stable, non-production debug key so successive CI APKs update in place.
+      TIKTV_DEBUG_KEYSTORE_BASE64: ${{ secrets.TIKTV_DEBUG_KEYSTORE_BASE64 }}
     steps:
       - uses: actions/checkout@v6
 
@@ -37,10 +40,7 @@ jobs:
         run: python3 scripts/validate_fork.py
 
       - name: Decode CI debug keystore
-        # Optional: a stable, non-production debug key so successive CI APKs update in place.
-        if: ${{ secrets.TIKTV_DEBUG_KEYSTORE_BASE64 != '' }}
-        env:
-          TIKTV_DEBUG_KEYSTORE_BASE64: ${{ secrets.TIKTV_DEBUG_KEYSTORE_BASE64 }}
+        if: ${{ env.TIKTV_DEBUG_KEYSTORE_BASE64 != '' }}
         run: |
           mkdir -p "${RUNNER_TEMP}/keystore"
           echo "${TIKTV_DEBUG_KEYSTORE_BASE64}" | base64 -d > "${RUNNER_TEMP}/keystore/tiktv-debug.p12"
