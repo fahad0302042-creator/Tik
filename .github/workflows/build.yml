@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: write
+  contents: read
 
 concurrency:
   group: "build-${{ github.ref }}"
@@ -47,47 +47,31 @@ jobs:
           echo "TIKTV_DEBUG_STORE_FILE=${RUNNER_TEMP}/keystore/tiktv-debug.p12" >> "$GITHUB_ENV"
 
       - name: Build debug APK
-        run: ./gradlew :app:assembleStableDebug 2>&1 | tee "$RUNNER_TEMP/assemble.log"
+        run: |
+          set -o pipefail
+          ./gradlew :app:assembleStableDebug 2>&1 | tee "$RUNNER_TEMP/assemble.log"
 
+      # CI logs cannot be read from outside the runner here, so republish the failure.
       - name: Report build failure
         if: failure()
         run: python3 .github/annotate_log.py "$RUNNER_TEMP/assemble.log"
 
       - name: Unit tests
-        id: unit-tests
-        run: ./gradlew :app:testStableDebugUnitTest 2>&1 | tee "$RUNNER_TEMP/unit-test.log"
+        run: |
+          set -o pipefail
+          ./gradlew :app:testStableDebugUnitTest 2>&1 | tee "$RUNNER_TEMP/unit-test.log"
 
       - name: Report test failure
-        if: failure() && steps.unit-tests.conclusion == 'failure'
+        if: failure()
         run: python3 .github/annotate_log.py "$RUNNER_TEMP/unit-test.log"
-
-      - name: Dump diagnostics
-        if: always()
-        run: |
-          {
-            echo "pwd=$(pwd)"
-            echo "--- gradle version ---"; ./gradlew --version --console=plain 2>&1 | head -15
-            echo "--- projects ---"; ./gradlew projects --console=plain 2>&1 | head -25
-            echo "--- assemble ---"; ./gradlew :app:assembleStableDebug --console=plain 2>&1 | tail -40
-            echo "--- apk files ---"; find . -name '*.apk' -print 2>&1 | head -20
-            echo "--- outputs dirs ---"; find . -maxdepth 6 -type d -name outputs -print 2>&1 | head -20
-            echo "--- app/build ---"; ls -la app/build 2>&1 | head -30
-            echo "--- build dir property ---"; ./gradlew :app:properties --console=plain 2>&1 | grep -i -E 'buildDir|buildDirectory' | head -10
-          } > ci-diagnostics/dump.txt 2>&1 || true
-          git config user.email "actions@github.com"
-          git config user.name "GitHub Actions"
-          git add ci-diagnostics/dump.txt
-          git commit -m "ci: diagnostics dump [skip ci]" || exit 0
-          git push origin "HEAD:$GITHUB_REF_NAME"
 
       - name: Upload APK
         if: always()
-        continue-on-error: true
         uses: actions/upload-artifact@v7
         with:
           name: tiktv-stable-debug
           path: app/build/outputs/apk/**/*.apk
-          if-no-files-found: warn
+          if-no-files-found: error
 
       - name: Upload test reports
         if: always()

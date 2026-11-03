@@ -247,6 +247,9 @@ android {
     buildFeatures {
         buildConfig = true
         viewBinding = true
+        // The fork name and the "Play with ..." share target are generated with resValue,
+        // so every translation stays in sync with tiktv.appName.
+        resValues = true
     }
 
     packaging {
