@@ -63,9 +63,15 @@ jobs:
 
       - name: Locate APK
         run: |
-          { find app/build/outputs -print || echo "app/build/outputs is missing"; } > "$RUNNER_TEMP/apk-tree.log" 2>&1
+          {
+            echo "pwd=$(pwd)"
+            echo "--- app ---"; ls -la app 2>&1
+            echo "--- app/build ---"; ls -la app/build 2>&1
+            echo "--- outputs dirs ---"; find . -maxdepth 5 -type d -name outputs -print 2>&1
+            echo "--- apk files ---"; find . -name '*.apk' -print 2>&1
+          } > "$RUNNER_TEMP/apk-tree.log" 2>&1
           python3 .github/annotate_log.py "$RUNNER_TEMP/apk-tree.log"
-          find app/build/outputs -name '*.apk' -print
+          find . -name '*.apk' -print
 
       - name: Upload APK
         if: always()
