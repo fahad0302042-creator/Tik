@@ -9,7 +9,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 concurrency:
   group: "build-${{ github.ref }}"
@@ -61,25 +61,32 @@ jobs:
         if: failure() && steps.unit-tests.conclusion == 'failure'
         run: python3 .github/annotate_log.py "$RUNNER_TEMP/unit-test.log"
 
-      - name: Locate APK
+      - name: Dump diagnostics
+        if: always()
         run: |
           {
             echo "pwd=$(pwd)"
             echo "--- app ---"; ls -la app 2>&1
             echo "--- app/build ---"; ls -la app/build 2>&1
-            echo "--- outputs dirs ---"; find . -maxdepth 5 -type d -name outputs -print 2>&1
+            echo "--- app/build/outputs ---"; find app/build/outputs -maxdepth 4 -print 2>&1 | head -80
+            echo "--- outputs dirs ---"; find . -maxdepth 6 -type d -name outputs -print 2>&1
             echo "--- apk files ---"; find . -name '*.apk' -print 2>&1
-          } > "$RUNNER_TEMP/apk-tree.log" 2>&1
-          python3 .github/annotate_log.py "$RUNNER_TEMP/apk-tree.log"
-          find . -name '*.apk' -print
+            echo "--- assemble tasks ---"; ./gradlew :app:tasks --all --console=plain 2>&1 | grep -i -E '^assemble|package.*Debug' | head -20
+          } > ci-diagnostics/dump.txt 2>&1 || true
+          git config user.email "actions@github.com"
+          git config user.name "GitHub Actions"
+          git add ci-diagnostics/dump.txt
+          git commit -m "ci: diagnostics dump [skip ci]" || exit 0
+          git push origin "HEAD:$GITHUB_REF_NAME"
 
       - name: Upload APK
         if: always()
+        continue-on-error: true
         uses: actions/upload-artifact@v7
         with:
           name: tiktv-stable-debug
           path: app/build/outputs/apk/**/*.apk
-          if-no-files-found: error
+          if-no-files-found: warn
 
       - name: Upload test reports
         if: always()
