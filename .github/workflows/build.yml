@@ -47,10 +47,19 @@ jobs:
           echo "TIKTV_DEBUG_STORE_FILE=${RUNNER_TEMP}/keystore/tiktv-debug.p12" >> "$GITHUB_ENV"
 
       - name: Build debug APK
-        run: ./gradlew :app:assembleStableDebug
+        run: ./gradlew :app:assembleStableDebug 2>&1 | tee "$RUNNER_TEMP/assemble.log"
+
+      - name: Report build failure
+        if: failure()
+        run: python3 .github/annotate_log.py "$RUNNER_TEMP/assemble.log"
 
       - name: Unit tests
-        run: ./gradlew :app:testStableDebugUnitTest
+        id: unit-tests
+        run: ./gradlew :app:testStableDebugUnitTest 2>&1 | tee "$RUNNER_TEMP/unit-test.log"
+
+      - name: Report test failure
+        if: failure() && steps.unit-tests.conclusion == 'failure'
+        run: python3 .github/annotate_log.py "$RUNNER_TEMP/unit-test.log"
 
       - name: Upload APK
         if: always()
