@@ -1,0 +1,17 @@
+pwd=/home/runner/work/Tik/Tik
+--- app ---
+total 40
+drwxr-xr-x  3 runner runner  4096 Nov  3 11:03 .
+drwxr-xr-x 15 runner runner  4096 Nov  3 11:04 ..
+-rw-r--r--  1 runner runner     6 Nov  3 11:03 .gitignore
+-rw-r--r--  1 runner runner 14913 Nov  3 11:03 build.gradle.kts
+-rw-r--r--  1 runner runner   518 Nov  3 11:03 lint.xml
+-rw-r--r--  1 runner runner   754 Nov  3 11:03 proguard-rules.pro
+drwxr-xr-x  7 runner runner  4096 Nov  3 11:03 src
+--- app/build ---
+ls: cannot access 'app/build': No such file or directory
+--- app/build/outputs ---
+find: ‘app/build/outputs’: No such file or directory
+--- outputs dirs ---
+--- apk files ---
+--- assemble tasks ---
